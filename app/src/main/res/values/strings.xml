@@ -1,0 +1,21 @@
+<resources>
+    <string name="app_name">Khách Hàng Thân Thiết</string>
+    <string name="login_title">Login</string>
+    <string name="login_button">Login</string>
+    <string name="change_password">Change Password</string>
+    <string name="phone_number">Phone Number</string>
+    <string name="points">Points</string>
+    <string name="add_points">Add Points</string>
+    <string name="use_points">Use Points</string>
+    <string name="customer_list">Customer List</string>
+    <string name="export_data">Export Data</string>
+    <string name="import_data">Import Data</string>
+    <string name="settings">Settings</string>
+    <string name="email_subject">Customer Data Export</string>
+    <string name="email_body">Please find attached the customer data in XML format.</string>
+    <string name="error_invalid_phone">Invalid phone number.</string>
+    <string name="error_insufficient_points">Insufficient points.</string>
+    <string name="success_points_updated">Points updated successfully.</string>
+    <string name="success_data_exported">Data exported successfully.</string>
+    <string name="success_data_imported">Data imported successfully.</string>
+</resources>

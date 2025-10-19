@@ -1,0 +1,49 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <TextView
+        android:id="@+id/textViewTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Khách Hàng Thân Thiết"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:layout_gravity="center"/>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerViewCustomers"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:layout_marginTop="16dp"/>
+
+    <Button
+        android:id="@+id/buttonAddPoints"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Nhập Điểm"/>
+
+    <Button
+        android:id="@+id/buttonUsePoints"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Sử Dụng Điểm"
+        android:layout_marginTop="8dp"/>
+
+    <Button
+        android:id="@+id/buttonExport"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Xuất Danh Sách"/>
+
+    <Button
+        android:id="@+id/buttonImport"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Nhập Danh Sách"
+        android:layout_marginTop="8dp"/>
+
+</LinearLayout>
