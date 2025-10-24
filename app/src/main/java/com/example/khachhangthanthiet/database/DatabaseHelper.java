@@ -1,14 +1,25 @@
 package com.example.khachhangthanthiet.database;
 
+import android.annotation.SuppressLint;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.database.Cursor;
+import android.util.Xml;
 
 import com.example.khachhangthanthiet.model.Customer;
 
+import org.xmlpull.v1.XmlPullParser;
+import org.xmlpull.v1.XmlSerializer;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.Locale;
 
 
 public class DatabaseHelper extends SQLiteOpenHelper {
@@ -194,6 +205,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         int updatedPoints = currentPoints + additionalPoints;
 
         ContentValues values = new ContentValues();
+        // Lưu thời gian cập nhật gần nhất
+        String currentTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(new Date());
+        values.put(COLUMN_LAST_UPDATED, currentTime);
+
         values.put(COLUMN_POINTS, updatedPoints);
 
         int rows = db.update(TABLE_CUSTOMERS,
@@ -224,6 +239,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         int remainingPoints = currentPoints - usedPoints;
 
         ContentValues values = new ContentValues();
+        // Lưu thời gian cập nhật gần nhất
+        String currentTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(new Date());
+        values.put(COLUMN_LAST_UPDATED, currentTime);
+
         values.put(COLUMN_POINTS, remainingPoints);
 
         int rows = db.update(
@@ -235,6 +254,101 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         db.close();
         return rows > 0;
+    }
+    public File exportToXML(Context context) {
+        try {
+            ArrayList<Customer> customers = getAllCustomers();
+
+            File exportDir = new File(context.getExternalFilesDir(null), "exports");
+            if (!exportDir.exists()) exportDir.mkdirs();
+
+            File file = new File(exportDir, "customers_export.xml");
+
+            FileOutputStream fos = new FileOutputStream(file);
+            XmlSerializer serializer = Xml.newSerializer();
+            serializer.setOutput(fos, "UTF-8");
+            serializer.startDocument("UTF-8", true);
+            serializer.startTag(null, "customers");
+
+            for (Customer c : customers) {
+                serializer.startTag(null, "customer");
+
+                serializer.startTag(null, COLUMN_PHONE);
+                serializer.text(c.getPhoneNumber());
+                serializer.endTag(null, COLUMN_PHONE);
+
+                serializer.startTag(null, COLUMN_POINTS);
+                serializer.text(String.valueOf(c.getPoints()));
+                serializer.endTag(null, COLUMN_POINTS);
+
+                serializer.startTag(null, COLUMN_LAST_UPDATED);
+                serializer.text(c.getLastUpdatedDate() != null ? c.getLastUpdatedDate() : "");
+                serializer.endTag(null, COLUMN_LAST_UPDATED);
+
+                serializer.endTag(null, "customer");
+            }
+
+            serializer.endTag(null, "customers");
+            serializer.endDocument();
+            serializer.flush();
+            fos.close();
+
+            return file;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public boolean importFromXML(File file) {
+        SQLiteDatabase db = null;
+        try {
+            db = this.getWritableDatabase();
+
+            XmlPullParser parser = Xml.newPullParser();
+            parser.setInput(new FileInputStream(file), "UTF-8");
+
+            int eventType = parser.getEventType();
+            String phone = null, points = null, lastUpdated = null;
+
+            while (eventType != XmlPullParser.END_DOCUMENT) {
+                String tagName = parser.getName();
+
+                if (eventType == XmlPullParser.START_TAG) {
+                    if ("customer".equals(tagName)) {
+                        phone = "";
+                        points = "";
+                        lastUpdated = "";
+                    } else if (COLUMN_PHONE.equals(tagName)) {
+                        phone = parser.nextText();
+                    } else if (COLUMN_POINTS.equals(tagName)) {
+                        points = parser.nextText();
+                    } else if (COLUMN_LAST_UPDATED.equals(tagName)) {
+                        lastUpdated = parser.nextText();
+                    }
+                }
+
+                if (eventType == XmlPullParser.END_TAG && "customer".equals(tagName)) {
+                    if (phone != null && !phone.isEmpty()) {
+                        ContentValues values = new ContentValues();
+                        values.put(COLUMN_PHONE, phone);
+                        values.put(COLUMN_POINTS, points != null && !points.isEmpty() ? Integer.parseInt(points) : 0);
+                        values.put(COLUMN_LAST_UPDATED, lastUpdated != null ? lastUpdated : "");
+
+                        db.insertWithOnConflict(TABLE_CUSTOMERS, null, values,
+                                SQLiteDatabase.CONFLICT_REPLACE);
+                    }
+                }
+
+                eventType = parser.next();
+            }
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        } finally {
+            if (db != null) db.close();
+        }
     }
 
 
