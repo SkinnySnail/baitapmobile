@@ -1,7 +1,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/main"
+    android:id="@+id/useActivity"
     android:padding="16dp">
 
     <LinearLayout
@@ -11,11 +11,38 @@
         android:layout_marginTop="75dp"
         android:orientation="vertical">
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerViewCustomers"
+        <!-- Input Phone Number -->
+        <EditText
+            android:id="@+id/etPhoneNumber"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginTop="16dp"/>
+            android:layout_height="wrap_content"
+            android:hint="Enter Phone Number"
+            android:inputType="phone" />
+
+        <!-- Display Current Points -->
+        <TextView
+            android:id="@+id/tvCurrentPoints"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Current Points: 0"
+            android:layout_marginTop="16dp"
+            android:textSize="16sp" />
+
+        <!-- Input Additional Points -->
+        <EditText
+            android:id="@+id/etAdditionalPoints"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Enter Used Points"
+            android:inputType="number" />
+
+        <!-- Update Button -->
+        <Button
+            android:id="@+id/btnUpdatePoints"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="Update Points" />
     </LinearLayout>
 
     <LinearLayout

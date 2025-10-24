@@ -19,6 +19,8 @@
 
         <activity android:name=".activity.MainActivity" />
         <activity android:name=".activity.ChangePasswordActivity" />
+        <activity android:name=".activity.InputActivity" />
+        <activity android:name=".activity.UseActivity" />
 
     </application>
 

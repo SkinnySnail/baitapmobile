@@ -41,7 +41,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:text="Đăng Nhập" />
+            android:text="Login" />
 
         <Button
             android:id="@+id/changePasswordBtn"
@@ -49,7 +49,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginTop="16dp"
-            android:text="Quên mật khẩu?"
+            android:text="Đổi mật khẩu"
             android:textColor="@android:color/holo_blue_dark" />
     </LinearLayout>
 
